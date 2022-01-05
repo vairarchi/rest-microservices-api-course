@@ -6,11 +6,14 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/vairarchi/rest-microservices-api-course/banking/confighelper"
 	"github.com/vairarchi/rest-microservices-api-course/banking/domain"
 	"github.com/vairarchi/rest-microservices-api-course/banking/service"
 )
 
 func Start() {
+
+	confighelper.InitViper()
 
 	router := mux.NewRouter()
 
@@ -21,6 +24,6 @@ func Start() {
 	router.HandleFunc("/customers", ch.getAllCustomers).Methods(http.MethodGet)
 	router.HandleFunc("/customers/{customer_id:[0-9]+}", ch.getCustomer).Methods(http.MethodGet)
 
-	fmt.Println("Server started on :8000")
-	log.Fatal(http.ListenAndServe(":8000", router))
+	fmt.Println("Server started on :", confighelper.GetConfig("SERVER_PORT"))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", confighelper.GetConfig("SERVER_ADDRESS"), confighelper.GetConfig("SERVER_PORT")), router))
 }

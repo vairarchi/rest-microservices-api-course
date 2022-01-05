@@ -24,7 +24,7 @@ func (d CustomerRepositoryDb) FindAll(status string) ([]Customer, *errs.AppError
 		// rows, err = d.client.Query(findAllSql)
 	} else {
 		findAllSql := "select customer_id, name, city, zipcode, date_of_birth, status from customers where status = ?"
-		d.client.Select(&customers, findAllSql)
+		err = d.client.Select(&customers, findAllSql, status)
 		// rows, err = d.client.Query(findAllSql, status)
 	}
 	if err != nil {
@@ -68,7 +68,7 @@ func (d CustomerRepositoryDb) ById(id string) (*Customer, *errs.AppError) {
 }
 
 func NewCustomerRepositoryDb() CustomerRepositoryDb {
-	client, err := sqlx.Open("mysql", "root:@tcp(localhost:3306)/banking")
+	client, err := sqlx.Open("mysql", "root:123456789@tcp(localhost:3306)/banking")
 	if err != nil {
 		panic(err)
 	}
